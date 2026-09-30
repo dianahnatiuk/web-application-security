@@ -1,0 +1,12 @@
+{
+  "name": "web-application-security",
+  "version": "1.0.0",
+  "description": "Simple CRUD REST app for houseplants (Express, in-memory storage)",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js"
+  },
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}
