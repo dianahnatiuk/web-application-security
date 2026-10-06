@@ -1,0 +1,40 @@
+### 1. Get all
+GET http://localhost:8080/api/v1/plants
+
+### 2. Get one
+GET http://localhost:8080/api/v1/plants/1
+
+### 3. Create
+POST http://localhost:8080/api/v1/plants
+Content-Type: application/json
+
+{
+  "name": "Aloe Vera",
+  "description": "Лікарська рослина з м'ясистим листям",
+  "wateringIntervalDays": 10,
+  "lightLevel": "Яскраве світло"
+}
+
+### 3a. Get all after create
+GET http://localhost:8080/api/v1/plants
+
+### 4. Update
+PUT http://localhost:8080/api/v1/plants/1
+Content-Type: application/json
+
+{
+  "id": "1",
+  "name": "Monstera Deliciosa",
+  "description": "Оновлений опис: велика тропічна ліана",
+  "wateringIntervalDays": 6,
+  "lightLevel": "Яскраве розсіяне світло"
+}
+
+### 4a. Get one after update
+GET http://localhost:8080/api/v1/plants/1
+
+### 5. Delete
+DELETE http://localhost:8080/api/v1/plants/2
+
+### 5a. Get all after delete
+GET http://localhost:8080/api/v1/plants
