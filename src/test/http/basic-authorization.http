@@ -1,0 +1,138 @@
+### 1. Get all items - Happy Path
+GET http://localhost:8080/api/v1/plants
+Authorization: Basic admin admin
+Accept: application/json
+
+> {%
+    client.test("Status is 200", function () {
+        client.assert(response.status === 200, "Expected 200, got " + response.status);
+    });
+%}
+
+### 2. Get all items - Unhappy Path
+GET http://localhost:8080/api/v1/plants
+Authorization: Basic admin1 admin
+Accept: application/json
+
+> {%
+    client.test("Status is 401", function () {
+        client.assert(response.status === 401, "Expected 401, got " + response.status);
+    });
+%}
+
+### 3. Get one item - Happy Path
+GET http://localhost:8080/api/v1/plants/1
+Authorization: Basic admin admin
+Accept: application/json
+
+> {%
+    client.test("Status is 200", function () {
+        client.assert(response.status === 200, "Expected 200, got " + response.status);
+    });
+%}
+
+### 4. Get one item - Unhappy Path
+GET http://localhost:8080/api/v1/plants/1
+Authorization: Basic admin1 admin
+Accept: application/json
+
+> {%
+    client.test("Status is 401", function () {
+        client.assert(response.status === 401, "Expected 401, got " + response.status);
+    });
+%}
+
+### 5. Create item - Happy Path
+POST http://localhost:8080/api/v1/plants
+Authorization: Basic admin admin
+Content-Type: application/json
+
+{
+  "name": "Aloe Vera",
+  "description": "Лікарська рослина з м'ясистим листям",
+  "wateringIntervalDays": 10,
+  "lightLevel": "Яскраве світло"
+}
+
+> {%
+    client.test("Status is 201", function () {
+        client.assert(response.status === 201, "Expected 201, got " + response.status);
+    });
+%}
+
+### 6. Create item - Unhappy Path
+POST http://localhost:8080/api/v1/plants
+Authorization: Basic admin1 admin
+Content-Type: application/json
+
+{
+  "name": "Aloe Vera",
+  "description": "Лікарська рослина з м'ясистим листям",
+  "wateringIntervalDays": 10,
+  "lightLevel": "Яскраве світло"
+}
+
+> {%
+    client.test("Status is 401", function () {
+        client.assert(response.status === 401, "Expected 401, got " + response.status);
+    });
+%}
+
+### 7. Update item - Happy Path
+PUT http://localhost:8080/api/v1/plants/1
+Authorization: Basic admin admin
+Content-Type: application/json
+
+{
+  "id": "1",
+  "name": "Monstera Deliciosa",
+  "description": "Оновлений опис: велика тропічна ліана",
+  "wateringIntervalDays": 6,
+  "lightLevel": "Яскраве розсіяне світло"
+}
+
+> {%
+    client.test("Status is 200", function () {
+        client.assert(response.status === 200, "Expected 200, got " + response.status);
+    });
+%}
+
+### 8. Update item - Unhappy Path
+PUT http://localhost:8080/api/v1/plants/1
+Authorization: Basic admin1 admin
+Content-Type: application/json
+
+{
+  "id": "1",
+  "name": "Monstera Deliciosa",
+  "description": "Оновлений опис: велика тропічна ліана",
+  "wateringIntervalDays": 6,
+  "lightLevel": "Яскраве розсіяне світло"
+}
+
+> {%
+    client.test("Status is 401", function () {
+        client.assert(response.status === 401, "Expected 401, got " + response.status);
+    });
+%}
+
+### 9. Delete item - Happy Path
+DELETE http://localhost:8080/api/v1/plants/2
+Authorization: Basic admin admin
+
+> {%
+    client.test("Status is 204", function () {
+        client.assert(response.status === 204, "Expected 204, got " + response.status);
+    });
+%}
+
+### 10. Delete item - Unhappy Path
+DELETE http://localhost:8080/api/v1/plants/2
+Authorization: Basic admin1 admin
+
+> {%
+    client.test("Status is 401", function () {
+        client.assert(response.status === 401, "Expected 401, got " + response.status);
+    });
+%}
+

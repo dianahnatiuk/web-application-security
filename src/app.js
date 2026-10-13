@@ -9,14 +9,17 @@
 'use strict';
 
 const express = require('express');
+const basicAuth = require('./middleware/basicAuth');
 const plantController = require('./controller/plantController');
 
 const app = express();
 const PORT = 8080;
 
+app.use(basicAuth);
 app.use(express.json());
 app.use('/api/v1/plants', plantController);
 
 app.listen(PORT, () => {
   console.log(`Server started: http://localhost:${PORT}/api/v1/plants`);
 });
+
