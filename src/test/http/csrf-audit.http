@@ -1,0 +1,69 @@
+### 1. Show all items
+GET http://localhost:8080/api/v1/plants
+Authorization: Basic admin admin
+Accept: application/json
+
+> {%
+    client.test("Show all: status is 200", function () {
+        client.assert(response.status === 200, "Expected 200, got " + response.status);
+    });
+%}
+
+### 2. Read one item
+GET http://localhost:8080/api/v1/plants/1
+Authorization: Basic admin admin
+Accept: application/json
+
+> {%
+    client.test("Read one: status is 200", function () {
+        client.assert(response.status === 200, "Expected 200, got " + response.status);
+    });
+%}
+
+### 3. Create one item
+POST http://localhost:8080/api/v1/plants
+Authorization: Basic admin admin
+Content-Type: application/json
+
+{
+  "name": "Aloe Vera",
+  "description": "Лікарська рослина з м'ясистим листям",
+  "wateringIntervalDays": 10,
+  "lightLevel": "Яскраве світло"
+}
+
+> {%
+    client.global.set("createdId", response.body.id);
+    client.test("Create one: status is 201", function () {
+        client.assert(response.status === 201, "Expected 201, got " + response.status);
+    });
+%}
+
+### 4. Update one item
+PUT http://localhost:8080/api/v1/plants/1
+Authorization: Basic admin admin
+Content-Type: application/json
+
+{
+  "id": "1",
+  "name": "Monstera Deliciosa",
+  "description": "Оновлений опис: велика тропічна ліана",
+  "wateringIntervalDays": 6,
+  "lightLevel": "Яскраве розсіяне світло"
+}
+
+> {%
+    client.test("Update one: status is 200", function () {
+        client.assert(response.status === 200, "Expected 200, got " + response.status);
+    });
+%}
+
+### 5. Delete one item
+DELETE http://localhost:8080/api/v1/plants/{{createdId}}
+Authorization: Basic admin admin
+
+> {%
+    client.test("Delete one: status is 204", function () {
+        client.assert(response.status === 204, "Expected 204, got " + response.status);
+    });
+%}
