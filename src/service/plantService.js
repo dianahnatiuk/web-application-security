@@ -10,34 +10,61 @@
 
 const Plant = require('../model/plant');
 
+const CURRENT_USER = 'admin';
+
 const plants = [];
 let idCounter = 3;
 
-plants.push(new Plant({
+function now() {
+  return new Date().toISOString();
+}
+
+function seed(data) {
+  const date = now();
+  plants.push(new Plant({
+    ...data,
+    createdDate: date,
+    createdBy: CURRENT_USER,
+    lastModifiedDate: date,
+    lastModifiedBy: CURRENT_USER,
+    version: 0,
+  }));
+}
+
+seed({
   id: '1',
   name: 'Monstera',
   description: 'Тропічна ліана з великим різьбленим листям',
   wateringIntervalDays: 7,
   lightLevel: 'Розсіяне світло',
-}));
-plants.push(new Plant({
+});
+seed({
   id: '2',
   name: 'Sansevieria',
   description: 'Невибаглива рослина, яка переносить посуху',
   wateringIntervalDays: 14,
   lightLevel: 'Півтінь',
-}));
-plants.push(new Plant({
+});
+seed({
   id: '3',
   name: 'Ficus Benjamina',
   description: 'Декоративне деревце з дрібним глянцевим листям',
   wateringIntervalDays: 5,
   lightLevel: 'Яскраве світло',
-}));
+});
 
 function create(data) {
   idCounter += 1;
-  const plant = new Plant({ ...data, id: String(idCounter) });
+  const date = now();
+  const plant = new Plant({
+    ...data,
+    id: String(idCounter),
+    createdDate: date,
+    createdBy: CURRENT_USER,
+    lastModifiedDate: date,
+    lastModifiedBy: CURRENT_USER,
+    version: 0,
+  });
   plants.push(plant);
   return plant;
 }
@@ -57,6 +84,9 @@ function update(id, data) {
   plant.description = data.description;
   plant.wateringIntervalDays = data.wateringIntervalDays;
   plant.lightLevel = data.lightLevel;
+  plant.lastModifiedDate = now();
+  plant.lastModifiedBy = CURRENT_USER;
+  plant.version += 1;
   return plant;
 }
 
