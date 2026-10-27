@@ -1,0 +1,107 @@
+### 1. Index page without login - permitAll
+GET http://localhost:8080/index.html
+Accept: text/plain, text/html
+
+> {%
+    client.test("Status is 200", function () {
+        client.assert(response.status === 200, "Expected 200, got " + response.status);
+    });
+%}
+
+### 2. ADMIN opens /hello/admin - hasRole ADMIN
+GET http://localhost:8080/hello/admin
+Authorization: Basic admin admin
+Accept: text/plain, text/html
+
+> {%
+    client.test("Status is 200", function () {
+        client.assert(response.status === 200, "Expected 200, got " + response.status);
+    });
+%}
+
+### 3. USER opens /hello/admin - forbidden
+GET http://localhost:8080/hello/admin
+Authorization: Basic user user
+Accept: text/plain, text/html
+
+> {%
+    client.test("Status is 403", function () {
+        client.assert(response.status === 403, "Expected 403, got " + response.status);
+    });
+%}
+
+### 4. USER opens /hello/user - hasRole USER
+GET http://localhost:8080/hello/user
+Authorization: Basic user user
+Accept: text/plain, text/html
+
+> {%
+    client.test("Status is 200", function () {
+        client.assert(response.status === 200, "Expected 200, got " + response.status);
+    });
+%}
+
+### 5. ADMIN opens /hello/user - forbidden
+GET http://localhost:8080/hello/user
+Authorization: Basic admin admin
+Accept: text/plain, text/html
+
+> {%
+    client.test("Status is 403", function () {
+        client.assert(response.status === 403, "Expected 403, got " + response.status);
+    });
+%}
+
+### 6. SUPERADMIN opens /hello/superadmin - hasRole SUPERADMIN
+GET http://localhost:8080/hello/superadmin
+Authorization: Basic superadmin superadmin
+Accept: text/plain, text/html
+
+> {%
+    client.test("Status is 200", function () {
+        client.assert(response.status === 200, "Expected 200, got " + response.status);
+    });
+%}
+
+### 7. ADMIN opens /hello/superadmin - forbidden
+GET http://localhost:8080/hello/superadmin
+Authorization: Basic admin admin
+Accept: text/plain, text/html
+
+> {%
+    client.test("Status is 403", function () {
+        client.assert(response.status === 403, "Expected 403, got " + response.status);
+    });
+%}
+
+### 8. USER opens /hello/man - hasAnyRole USER or ADMIN
+GET http://localhost:8080/hello/man
+Authorization: Basic user user
+Accept: text/plain, text/html
+
+> {%
+    client.test("Status is 200", function () {
+        client.assert(response.status === 200, "Expected 200, got " + response.status);
+    });
+%}
+
+### 9. SUPERADMIN opens /hello/man - forbidden
+GET http://localhost:8080/hello/man
+Authorization: Basic superadmin superadmin
+Accept: text/plain, text/html
+
+> {%
+    client.test("Status is 403", function () {
+        client.assert(response.status === 403, "Expected 403, got " + response.status);
+    });
+%}
+
+### 10. No login on /hello/admin - unauthorized
+GET http://localhost:8080/hello/admin
+Accept: text/plain, text/html
+
+> {%
+    client.test("Status is 401", function () {
+        client.assert(response.status === 401, "Expected 401, got " + response.status);
+    });
+%}

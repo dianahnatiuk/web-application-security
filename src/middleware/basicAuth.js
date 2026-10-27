@@ -8,8 +8,7 @@
 
 'use strict';
 
-const USERNAME = process.env.AUTH_USER || 'admin';
-const PASSWORD = process.env.AUTH_PASSWORD || 'admin';
+const { findUser, passwordMatches } = require('../config/users');
 
 function basicAuth(req, res, next) {
     const header = req.headers.authorization || '';
@@ -18,11 +17,16 @@ function basicAuth(req, res, next) {
     if (scheme === 'Basic' && encoded) {
         const decoded = Buffer.from(encoded, 'base64').toString('utf8');
         const separator = decoded.indexOf(':');
-        const user = decoded.slice(0, separator);
-        const password = decoded.slice(separator + 1);
 
-        if (separator !== -1 && user === USERNAME && password === PASSWORD) {
-            return next();
+        if (separator !== -1) {
+            const username = decoded.slice(0, separator);
+            const password = decoded.slice(separator + 1);
+            const user = findUser(username);
+
+            if (user && passwordMatches(user, password)) {
+                req.user = { username: user.username, role: user.role };
+                return next();
+            }
         }
     }
 
