@@ -8,10 +8,18 @@
 
 'use strict';
 
+const bcrypt = require('bcryptjs');
+
+// Аналог @Bean PasswordEncoder (BCryptPasswordEncoder)
+const passwordEncoder = {
+    encode: (rawPassword) => bcrypt.hashSync(rawPassword, 10),
+    matches: (rawPassword, encodedPassword) => bcrypt.compareSync(rawPassword, encodedPassword),
+};
+
 const users = [
-    { username: 'admin', password: '{noop}admin', role: 'ADMIN' },
-    { username: 'user', password: '{noop}user', role: 'USER' },
-    { username: 'superadmin', password: '{noop}superadmin', role: 'SUPERADMIN' },
+    { username: 'admin', password: passwordEncoder.encode('admin'), role: 'ADMIN' },
+    { username: 'user', password: passwordEncoder.encode('user'), role: 'USER' },
+    { username: 'superadmin', password: passwordEncoder.encode('superadmin'), role: 'SUPERADMIN' },
 ];
 
 function findUser(username) {
@@ -19,11 +27,7 @@ function findUser(username) {
 }
 
 function passwordMatches(user, rawPassword) {
-    const stored = user.password;
-    if (stored.startsWith('{noop}')) {
-        return stored.slice('{noop}'.length) === rawPassword;
-    }
-    return false;
+    return passwordEncoder.matches(rawPassword, user.password);
 }
 
-module.exports = { findUser, passwordMatches };
+module.exports = { findUser, passwordMatches, passwordEncoder };

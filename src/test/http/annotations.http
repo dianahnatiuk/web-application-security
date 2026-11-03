@@ -1,0 +1,60 @@
+### 1. permitAll: без логіну -> 200
+GET http://localhost:8080/hello/public
+
+### 2. permitAll: головна сторінка без логіну -> 200
+GET http://localhost:8080/
+
+### 3. admin -> /hello/admin -> 200
+GET http://localhost:8080/hello/admin
+Authorization: Basic admin admin
+
+### 4. admin -> /hello/user -> 403
+GET http://localhost:8080/hello/user
+Authorization: Basic admin admin
+
+### 5. user -> /hello/user -> 200
+GET http://localhost:8080/hello/user
+Authorization: Basic user user
+
+### 6. user -> /hello/admin -> 403
+GET http://localhost:8080/hello/admin
+Authorization: Basic user user
+
+### 7. superadmin -> /hello/superadmin -> 200
+GET http://localhost:8080/hello/superadmin
+Authorization: Basic superadmin superadmin
+
+### 8. admin -> /hello/superadmin -> 403
+GET http://localhost:8080/hello/superadmin
+Authorization: Basic admin admin
+
+### 9. hasAnyRole: admin -> /hello/man -> 200
+GET http://localhost:8080/hello/man
+Authorization: Basic admin admin
+
+### 10. hasAnyRole: user -> /hello/man -> 200
+GET http://localhost:8080/hello/man
+Authorization: Basic user user
+
+### 11. hasAnyRole: superadmin -> /hello/man -> 403
+GET http://localhost:8080/hello/man
+Authorization: Basic superadmin superadmin
+
+### 12. hasAnyRole: superadmin -> /hello/staff -> 200
+GET http://localhost:8080/hello/staff
+Authorization: Basic superadmin superadmin
+
+### 13. без анотації: user -> /hello/all -> 200
+GET http://localhost:8080/hello/all
+Authorization: Basic user user
+
+### 14. без анотації: superadmin -> /hello/all -> 200
+GET http://localhost:8080/hello/all
+Authorization: Basic superadmin superadmin
+
+### 15. неправильний пароль -> 401
+GET http://localhost:8080/hello/admin
+Authorization: Basic admin wrong
+
+### 16. без авторизації на захищений роут -> 401
+GET http://localhost:8080/hello/user
