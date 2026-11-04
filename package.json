@@ -4,10 +4,15 @@
   "description": "Simple CRUD REST app for houseplants (Express, in-memory storage)",
   "main": "src/app.js",
   "scripts": {
-    "start": "node src/app.js"
+    "start": "node src/app.js",
+    "test": "jest"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "express": "^4.21.1"
+  },
+  "devDependencies": {
+    "jest": "^30.5.2",
+    "supertest": "^7.3.1"
   }
 }
